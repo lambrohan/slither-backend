@@ -1,0 +1,25 @@
+version: '3.6'
+services:
+  db:
+    image: mongo:latest
+    restart: always
+    volumes:
+      - ${MONGO_DATA_PATH}:/data/db
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+
+
+  nest-app:
+    depends_on:
+      - db
+    build:
+      context: ./nest-app
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - ${NEST_PORT}:${NEST_PORT}
+
