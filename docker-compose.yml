@@ -1,15 +1,15 @@
 version: '3.6'
 services:
   db:
-    image: mongo:latest
+    image: postgres:14
     restart: always
     volumes:
-      - ${MONGO_DATA_PATH}:/data/db
+      - ${DB_DATA_PATH}:/var/lib/postgresql/data
     ports:
-      - 27017:27017
+      - 5432:5432
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
 
 
   nest-app:

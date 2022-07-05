@@ -1,0 +1,73 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum TxnType {
+  DEPOSIT
+  EARNING
+  STAKE
+  WITHDRAW
+}
+
+model User {
+  id             String        @unique @default(uuid())
+  public_address String        @unique
+  created_at     DateTime      @default(now())
+  updated_at     DateTime      @updatedAt
+  is_admin       Boolean       @default(false)
+  wallet         Wallet?
+  transactions   Transaction[]
+  game_sessions  GameSession[]
+}
+
+model Wallet {
+  id      String @unique @default(uuid())
+  amount  BigInt @default(0)
+  user    User   @relation(fields: [user_id], references: [id])
+  user_id String @unique
+}
+
+model Transaction {
+  id         String  @unique @default(uuid())
+  type       TxnType
+  hash       String?
+  deposit_id String?
+  amount     BigInt  @default(0)
+  user       User    @relation(fields: [user_id], references: [id])
+  user_id    String
+  session_id String?
+
+  @@unique([hash, deposit_id, session_id])
+}
+
+model GameSession {
+  id            String    @unique @default(uuid())
+  started_at    DateTime  @default(now())
+  finished_at   DateTime?
+  tokens_earned BigInt    @default(0)
+  tokens_staked BigInt
+  kills         Int       @default(0)
+  won           Boolean   @default(false)
+  user          User      @relation(fields: [user_id], references: [id])
+  user_id       String
+  room          GameRoom  @relation(fields: [room_id], references: [id])
+  room_id       String
+}
+
+model GameRoom {
+  id              String        @unique @default(uuid())
+  min_usd_to_join Float
+  max_usd_to_join Float
+  created_at      DateTime      @default(now())
+  name            String        @unique()
+  variable_stake  Boolean       @default(false)
+  game_sessions   GameSession[]
+}
