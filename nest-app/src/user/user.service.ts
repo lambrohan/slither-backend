@@ -31,4 +31,15 @@ export class UserService {
       },
     });
   }
+
+  async getAllUsers() {
+    return await this.prisma.user.findMany({
+      orderBy: {
+        created_at: 'desc',
+      },
+      include: {
+        wallet: true,
+      },
+    });
+  }
 }

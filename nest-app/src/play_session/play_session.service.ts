@@ -130,4 +130,12 @@ export class PlaySessionService {
       sessionId: sessionExists.id,
     };
   }
+
+  async getAll() {
+    return await this.prisma.gameSession.findMany({
+      orderBy: {
+        started_at: 'desc',
+      },
+    });
+  }
 }

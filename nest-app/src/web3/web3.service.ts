@@ -39,10 +39,13 @@ export class Web3Service {
   async getTxnDetailsFromDepositId(
     id: string,
   ): Promise<TxnDetailsFromDepositId> {
-    return await this.depositContract.methods.idToDeposit(id).call();
+    const txnInfo = await this.depositContract.methods.idToDeposit(id).call();
+    txnInfo.amount = txnInfo.amount / Math.pow(10, 18);
+    return txnInfo;
   }
 
   async sendTokensToUser(public_address: string, amt: number) {
+    this.depositContract.methods.withdrawTokensTest(amt);
     console.log(this.depositContract.methods);
   }
 }

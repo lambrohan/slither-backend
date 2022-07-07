@@ -4,6 +4,8 @@ import {
   Post,
   Request,
   BadRequestException,
+  Param,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -12,9 +14,11 @@ import { Public } from 'src/common/decorators/public.decorator';
 import * as Web3Token from 'web3-token';
 import { User } from './entities/user.entity';
 import { WalletService } from 'src/wallet/wallet.service';
+import { ColyseusBackendOnly } from 'src/auth/colyseusonly.guard';
+import { AdminAuthGuard } from 'src/auth/admin.guard';
 
-@Controller('users')
-@ApiTags('users')
+@Controller('user')
+@ApiTags('user')
 export class UserController {
   constructor(
     private readonly userService: UserService,
@@ -48,14 +52,22 @@ export class UserController {
     return new BadRequestException();
   }
 
-  // @Get(':pub_addr')
-  // findOne(@Param('pub_addr') pub_addr: string) {
-  //   return this.userService.findWithPubAddr(pub_addr);
-  // }
+  @Public()
+  @UseGuards(ColyseusBackendOnly)
+  @Get(':pub_addr')
+  findOne(@Param('pub_addr') pub_addr: string) {
+    return this.userService.findWithPubAddr(pub_addr);
+  }
 
   @Get('me')
   @ApiBearerAuth()
   async me(@GetUser() user: User) {
     return await this.userService.getFullUser(user.public_address);
+  }
+
+  @Get()
+  @UseGuards(AdminAuthGuard)
+  async getAllUsers() {
+    return await this.userService.getAllUsers();
   }
 }

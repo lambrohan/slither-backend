@@ -1,5 +1,4 @@
 import { BadRequestException } from '@nestjs/common';
-import { Transaction } from '@prisma/client';
 import { CurrencyAddress } from 'src/common/enums';
 import { TxnDetailsFromDepositId } from 'src/common/interfaces';
 

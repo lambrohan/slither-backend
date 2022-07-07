@@ -7,13 +7,18 @@ import {
   Param,
   Post,
   UnauthorizedException,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { TxnType } from '@prisma/client';
+import { AdminAuthGuard } from 'src/auth/admin.guard';
 import { GetUser } from 'src/common/decorators/get-user.decorator';
+import { Public } from 'src/common/decorators/public.decorator';
+import { CurrencyAddress } from 'src/common/enums';
 import { User } from 'src/user/entities/user.entity';
 import { getBabyDogeFromTxn } from 'src/utils';
 import { WalletService } from 'src/wallet/wallet.service';
+import { ConversionService } from 'src/web3/conversion.service';
 import { Web3Service } from 'src/web3/web3.service';
 import { WithdrawTokenDto } from './dto/withdraw.dto';
 import { TxnService } from './txn.service';
@@ -25,6 +30,7 @@ export class TxnController {
     private readonly txnService: TxnService,
     private readonly web3Service: Web3Service,
     private readonly walletService: WalletService,
+    private readonly conversionService: ConversionService,
   ) {}
 
   @Get('/deposit/:id')
@@ -37,7 +43,9 @@ export class TxnController {
       return new UnauthorizedException();
     }
 
-    const babyDogeToAdd = getBabyDogeFromTxn(depositInfo);
+    const babyDogeToAdd = await this.conversionService.getBabyDogeFromTxn(
+      depositInfo,
+    );
 
     if (babyDogeToAdd <= 0) {
       throw new BadRequestException(`invalid token amount ${babyDogeToAdd}`);
@@ -92,5 +100,18 @@ export class TxnController {
     await this.walletService.decrementTokens(dto.amount, user.id);
 
     return txn;
+  }
+
+  // @Public()
+  // @Get('/test')
+  // async test() {
+  //   return await this.web3Service.getTxnDetailsFromDepositId(2 + '');
+  // }
+
+  @Get()
+  @UseGuards(AdminAuthGuard)
+  @ApiBearerAuth()
+  async getAll() {
+    return await this.txnService.getAll();
   }
 }

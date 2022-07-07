@@ -20,10 +20,10 @@ export class TxnService {
     });
   }
 
-  async findByHash(hash: string) {
-    return await this.prisma.transaction.findFirst({
-      where: {
-        hash,
+  async getAll() {
+    return await this.prisma.transaction.findMany({
+      orderBy: {
+        created_at: 'desc',
       },
     });
   }

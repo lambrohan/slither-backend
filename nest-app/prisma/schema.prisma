@@ -36,14 +36,15 @@ model Wallet {
 }
 
 model Transaction {
-  id         String  @unique @default(uuid())
+  id         String   @unique @default(uuid())
   type       TxnType
   hash       String?
   deposit_id String?
-  amount     BigInt  @default(0)
-  user       User    @relation(fields: [user_id], references: [id])
+  amount     BigInt   @default(0)
+  user       User     @relation(fields: [user_id], references: [id])
   user_id    String
   session_id String?
+  created_at DateTime @default(now())
 
   @@unique([hash, deposit_id, session_id])
 }
