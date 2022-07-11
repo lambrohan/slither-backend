@@ -1,1 +1,1 @@
-export const COLYSEUS_TOKEN= process.env.COLYSEUS_TOKEN || 'changemelater'
+export const COLYSEUS_TOKEN = process.env.COLYSEUS_TOKEN || 'changemelater';

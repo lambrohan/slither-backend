@@ -11,7 +11,6 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
 
-
   nest-app:
     depends_on:
       - db
@@ -21,5 +20,20 @@ services:
     env_file:
       - .env
     ports:
-      - ${NEST_PORT}:${NEST_PORT}
+      - 4000:4000
+    
+  colyseus:
+    depends_on:
+      - nest-app
+    image:  lambrohan/mygame:latest
+    restart: always
+    ports:
+      - 2567:2567
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: ${NODE_ENV}
+      API_BACKEND_URL: http://nest-app:4000
+      API_AUTH_TOKEN: ${API_AUTH_TOKEN}
+
 

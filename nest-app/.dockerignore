@@ -1,6 +1,7 @@
 .circleci
 .github
 .github/*
+prisma/migrations
 
 # compiled output
 /dist
