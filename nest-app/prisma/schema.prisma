@@ -17,6 +17,14 @@ enum TxnType {
   WITHDRAW
 }
 
+enum FoodType {
+  RED
+  BLUE
+  GREEN
+  COIN
+  ORANGE
+}
+
 model User {
   id             String        @unique @default(uuid())
   public_address String        @unique
@@ -61,14 +69,38 @@ model GameSession {
   user_id       String
   room          GameRoom  @relation(fields: [room_id], references: [id])
   room_id       String
+  snake_length  Int       @default(0)
+  rank          Int       @default(0)
+  nickname      String?
 }
 
 model GameRoom {
-  id              String        @unique @default(uuid())
-  min_usd_to_join Float
-  max_usd_to_join Float
-  created_at      DateTime      @default(now())
-  name            String        @unique()
-  variable_stake  Boolean       @default(false)
-  game_sessions   GameSession[]
+  id                  String         @unique @default(uuid())
+  min_usd_to_join     Float
+  max_usd_to_join     Float
+  created_at          DateTime       @default(now())
+  name                String         @unique()
+  variable_stake      Boolean        @default(false)
+  game_sessions       GameSession[]
+  max_players         Int            @default(0)
+  tokens              BigInt         @default(0)
+  tokens_per_instance BigInt         @default(0)
+  instances           RoomInstance[]
+}
+
+model Food {
+  id    String   @unique @default(uuid())
+  type  FoodType @unique
+  value Int
+}
+
+model RoomInstance {
+  id               String    @unique @default(uuid())
+  room             GameRoom  @relation(fields: [room_id], references: [id])
+  room_id          String
+  created_at       DateTime  @default(now())
+  destroyed_at     DateTime?
+  tokens           BigInt
+  colyseus_room_id String    @unique
+
 }

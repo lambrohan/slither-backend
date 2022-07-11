@@ -69,6 +69,7 @@ export class PlaySessionService {
       data: {
         id: sessionId,
         tokens_staked: stakeBabyDoge,
+        nickname: initDto.nickname,
         user: {
           connect: {
             id: user.id,
@@ -84,6 +85,7 @@ export class PlaySessionService {
   }
 
   async endSession(dto: EndSessionDto) {
+    dto.tokensEarned = dto.tokensEarned * Math.pow(10, 6);
     const sessionExists = await this.prisma.gameSession.findUnique({
       where: {
         id: dto.sessionId,
@@ -102,6 +104,8 @@ export class PlaySessionService {
         kills: dto.kills,
         tokens_earned: dto.tokensEarned,
         finished_at: dto.finishedAt,
+        snake_length: dto.snake_length,
+        rank: dto.rank,
       },
     });
 
@@ -135,6 +139,14 @@ export class PlaySessionService {
     return await this.prisma.gameSession.findMany({
       orderBy: {
         started_at: 'desc',
+      },
+    });
+  }
+
+  async getById(id: string) {
+    return await this.prisma.gameSession.findUnique({
+      where: {
+        id,
       },
     });
   }

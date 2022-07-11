@@ -22,4 +22,12 @@ export class EndSessionDto {
   @IsDateString()
   @ApiProperty()
   finishedAt: string;
+
+  @IsNumber()
+  @ApiProperty()
+  rank: number;
+
+  @ApiProperty()
+  @IsNumber()
+  snake_length: number;
 }

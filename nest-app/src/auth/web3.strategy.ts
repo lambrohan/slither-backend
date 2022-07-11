@@ -12,6 +12,9 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'web3') {
 
   async validate(req: Request, callback) {
     try {
+      if (!req.headers.authorization) {
+        throw new UnauthorizedException();
+      }
       const [a, token] = req.headers.authorization.split('Bearer ');
       const { address } = await Web3Token.verify(token);
       const user = await this.userService.findWithPubAddr(address);

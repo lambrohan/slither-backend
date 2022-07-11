@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsString } from 'class-validator';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class InitSessionDto {
   @ApiProperty()
@@ -13,4 +13,8 @@ export class InitSessionDto {
   @ApiProperty()
   @IsNumber()
   stakeAmtUsd: number;
+
+  @ApiProperty()
+  @IsString()
+  nickname: string;
 }

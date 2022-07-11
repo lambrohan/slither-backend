@@ -28,7 +28,7 @@ export class WalletService {
       },
       data: {
         amount: {
-          increment: amt * -1,
+          increment: -amt,
         },
       },
     });

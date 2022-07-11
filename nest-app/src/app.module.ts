@@ -11,6 +11,7 @@ import { Web3JwtAuthGuard } from './auth/web3.guard';
 import { PlaySessionModule } from './play_session/play_session.module';
 import { RoomModule } from './room/room.module';
 import { GlobalModule } from './global.module';
+import { MetadataModule } from './metadata/metadata.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { GlobalModule } from './global.module';
     AuthModule,
     PlaySessionModule,
     RoomModule,
+    MetadataModule,
   ],
   controllers: [AppController],
   providers: [

@@ -3,13 +3,17 @@ import {
   Controller,
   Get,
   NotFoundException,
+  Param,
   Post,
   Put,
+  UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { User } from '@prisma/client';
 import { AdminAuthGuard } from 'src/auth/admin.guard';
 import { ColyseusBackendOnly } from 'src/auth/colyseusonly.guard';
+import { GetUser } from 'src/common/decorators/get-user.decorator';
 import { Public } from 'src/common/decorators/public.decorator';
 import { EndSessionDto } from './dto/end-session.dto';
 import { InitSessionDto } from './dto/init-session.dto';
@@ -41,5 +45,15 @@ export class PlaySessionController {
   @ApiBearerAuth()
   async getAll() {
     return await this.playSessionService.getAll();
+  }
+
+  @Get('/:id')
+  @ApiBearerAuth()
+  async getById(@GetUser() user: User, @Param('id') id: string) {
+    const session = await this.playSessionService.getById(id);
+    if (user.is_admin || user.id === session.user_id) {
+      return session;
+    }
+    return new UnauthorizedException();
   }
 }
