@@ -34,6 +34,16 @@ export class PlaySessionService {
     const room = await this.roomService.findByName(initDto.roomName);
     if (!room) throw new NotFoundException('room not found');
 
+    if (initDto.stakeAmtUsd < room.min_usd_to_join)
+      throw new BadRequestException(
+        `min stake of $${room.min_usd_to_join} required`,
+      );
+    if (initDto.stakeAmtUsd > room.max_usd_to_join) {
+      throw new BadRequestException(
+        `max stake of $${room.max_usd_to_join} allowed`,
+      );
+    }
+
     // check if user have enough wallet balance
     const wallet = await this.walletService.getByUserId(user.id);
     if (!wallet) throw new NotFoundException('wallet not found');
