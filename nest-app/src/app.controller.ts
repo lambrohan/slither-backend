@@ -23,7 +23,6 @@ export class AppController {
     return await this.appService.getUserDashData(user.id);
   }
 
-  @Public()
   @UseGuards(AdminAuthGuard)
   @Get('/txnmeta')
   async getTxnMeta() {
