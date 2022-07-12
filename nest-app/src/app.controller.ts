@@ -1,7 +1,8 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 import { AppService } from './app.service';
+import { AdminAuthGuard } from './auth/admin.guard';
 import { GetUser } from './common/decorators/get-user.decorator';
 import { Public } from './common/decorators/public.decorator';
 
@@ -20,5 +21,12 @@ export class AppController {
   @Get('/dashboard/me')
   async getDashboardData(@GetUser() user: User) {
     return await this.appService.getUserDashData(user.id);
+  }
+
+  @Public()
+  @UseGuards(AdminAuthGuard)
+  @Get('/txnmeta')
+  async getTxnMeta() {
+    return await this.appService.getTxnDashData();
   }
 }

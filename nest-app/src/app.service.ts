@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UserDashInfo } from './common/interfaces/DashInfo.dto';
+import { TxnAdminInfo } from './common/interfaces/TxnAdminInfo.dto';
 import { PrismaService } from './prisma.service';
 
 @Injectable()
@@ -46,5 +47,16 @@ export class AppService {
       losses,
       recentRank,
     };
+  }
+
+  async getTxnDashData(): Promise<TxnAdminInfo> {
+    const res = await this.prisma
+      .$queryRaw`select sum(case when t.type = 'DEPOSIT' then t.amount else 0 end
+    ) as totalDeposit, sum(case when t.type = 'WITHDRAW' then t.amount else 0 end
+    ) as totalWithdraw from "Transaction" t;`;
+
+    if (res && res[0]) {
+      return res[0];
+    }
   }
 }
