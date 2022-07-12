@@ -9,16 +9,16 @@ const roomData: Prisma.GameRoomCreateManyInput[] = [
     max_usd_to_join: 500,
     variable_stake: true,
     max_players: 50,
-    tokens: 10 * Math.pow(10, 12), // change tokens according to need
-    tokens_per_instance: 1 * Math.pow(10, 9),
+    tokens: 10 * Math.pow(10, 15), // change tokens according to need
+    tokens_per_instance: 1 * Math.pow(10, 10),
   },
   {
     name: 'ice',
     min_usd_to_join: 0.5,
     max_usd_to_join: 0.5,
     max_players: 50,
-    tokens: 10 * Math.pow(10, 12), // change tokens according to need
-    tokens_per_instance: 1 * Math.pow(10, 9),
+    tokens: 10 * Math.pow(10, 15), // change tokens according to need
+    tokens_per_instance: 1 * Math.pow(10, 10),
   },
 ];
 
