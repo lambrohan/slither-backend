@@ -26,7 +26,7 @@ enum FoodType {
 }
 
 model User {
-  id             String        @unique @default(uuid())
+  id             String        @id @default(uuid())
   public_address String        @unique
   created_at     DateTime      @default(now())
   updated_at     DateTime      @updatedAt
@@ -37,14 +37,14 @@ model User {
 }
 
 model Wallet {
-  id      String @unique @default(uuid())
+  id      String @id @default(uuid())
   amount  BigInt @default(0)
   user    User   @relation(fields: [user_id], references: [id])
   user_id String @unique
 }
 
 model Transaction {
-  id         String   @unique @default(uuid())
+  id         String   @id @default(uuid())
   type       TxnType
   hash       String?
   deposit_id String?
@@ -58,7 +58,7 @@ model Transaction {
 }
 
 model GameSession {
-  id            String    @unique @default(uuid())
+  id            String    @id @default(uuid())
   started_at    DateTime  @default(now())
   finished_at   DateTime?
   tokens_earned BigInt    @default(0)
@@ -75,7 +75,7 @@ model GameSession {
 }
 
 model GameRoom {
-  id                  String         @unique @default(uuid())
+  id                  String         @id @default(uuid())
   min_usd_to_join     Float
   max_usd_to_join     Float
   created_at          DateTime       @default(now())
@@ -89,13 +89,13 @@ model GameRoom {
 }
 
 model Food {
-  id    String   @unique @default(uuid())
+  id    String   @id @default(uuid())
   type  FoodType @unique
   value Int
 }
 
 model RoomInstance {
-  id               String    @unique @default(uuid())
+  id               String    @id @default(uuid())
   room             GameRoom  @relation(fields: [room_id], references: [id])
   room_id          String
   created_at       DateTime  @default(now())
