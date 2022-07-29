@@ -86,6 +86,8 @@ model GameRoom {
   tokens              BigInt         @default(0)
   tokens_per_instance BigInt         @default(0)
   instances           RoomInstance[]
+  min_minutes_to_win  Int            @default(10)
+  min_kills_to_win    Int            @default(3)
 }
 
 model Food {
@@ -102,5 +104,4 @@ model RoomInstance {
   destroyed_at     DateTime?
   tokens           BigInt
   colyseus_room_id String    @unique
-
 }

@@ -48,4 +48,14 @@ export class Web3Service {
     this.depositContract.methods.withdrawTokensTest(amt);
     console.log(this.depositContract.methods);
   }
+
+  private async listenWithdrawEvents() {
+    this.depositContract.events
+      .Withdrawn({}, (err, data) => {
+        console.log(err, data);
+      })
+      .on('data', (event) => {
+        console.log(event);
+      });
+  }
 }
