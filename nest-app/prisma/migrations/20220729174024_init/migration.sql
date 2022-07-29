@@ -67,6 +67,8 @@ CREATE TABLE "GameRoom" (
     "max_players" INTEGER NOT NULL DEFAULT 0,
     "tokens" BIGINT NOT NULL DEFAULT 0,
     "tokens_per_instance" BIGINT NOT NULL DEFAULT 0,
+    "min_minutes_to_win" INTEGER NOT NULL DEFAULT 10,
+    "min_kills_to_win" INTEGER NOT NULL DEFAULT 3,
 
     CONSTRAINT "GameRoom_pkey" PRIMARY KEY ("id")
 );
